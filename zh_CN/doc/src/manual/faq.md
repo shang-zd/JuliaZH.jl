@@ -90,13 +90,13 @@ array (bound to `x` at the call site, and bound to `A` within the function). Not
 the function call, `x` is still bound to the same array, but the content of that array changed:
 the variables `A` and `x` were distinct bindings referring to the same mutable `Array` object.
 
-### Can I use `using` or `import` inside a function?
+### 是否可以在函数内部使用 `using` 或 `import` ？
 
-No, you are not allowed to have a `using` or `import` statement inside a function.  If you want
-to import a module but only use its symbols inside a specific function or set of functions, you
-have two options:
+不可以，在函数内部含有 `using` 或 `import` 语句是不被允许的。
+如果你希望导入一个模块，但只在特定的一个或一组函数中使用它的符号，
+有以下两种方式：
 
-1. Use `import`:
+1. 使用 `import` ：
 
    ```julia
    import Foo

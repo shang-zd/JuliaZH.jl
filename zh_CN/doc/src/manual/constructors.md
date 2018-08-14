@@ -1,9 +1,6 @@
 # [构造函数](@id man-constructors)
 
-Constructors [^1] are functions that create new objects -- specifically, instances of [Composite Types](@ref).
-In Julia, type objects also serve as constructor functions: they create new instances of themselves
-when applied to an argument tuple as a function. This much was already mentioned briefly when
-composite types were introduced. For example:
+构造函数 [^1] 是用来创建新对象 -- 确切地说，是创建 [复合类型（Composite Types）](@ref) 的实例，的函数。在 Julia 中，类型对象也同时充当构造函数的角色：它们可以被当作函数应用到参数元组上来创建自己的新实例。这一点在介绍复合类型（Composite Types）时已经大致谈过了。例如：
 
 ```jldoctest footype
 julia> struct Foo
@@ -21,30 +18,14 @@ julia> foo.baz
 2
 ```
 
-For many types, forming new objects by binding their field values together is all that is ever
-needed to create instances. There are, however, cases where more functionality is required when
-creating composite objects. Sometimes invariants must be enforced, either by checking arguments
-or by transforming them. [Recursive data structures](https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Recursive_data_structures_.28structural_recursion.29),
-especially those that may be self-referential, often cannot be constructed cleanly without first
-being created in an incomplete state and then altered programmatically to be made whole, as a
-separate step from object creation. Sometimes, it's just convenient to be able to construct objects
-with fewer or different types of parameters than they have fields. Julia's system for object construction
-addresses all of these cases and more.
+对很多类型来说，创建新对象时只需要为它们的所有字段绑定上值就足够产生新实例了。然而，在某些情形下，创建复合对象需要更多的功能。有时必须通过检查或改变参数来保证满足限制。[递归数据结构（Recursive data structures）](https://en.wikipedia.org/wiki/Recursion_omputer_science%29#Recursive_data_structures_.28structural_recursion.29)，特别是那些可能引用自身的数据结构，它们需要首先被不完整地构造，然后作为创建对象的单独步骤，通过编程的方式完成补全，否则它们不能被干净地构造。这时，能够用比字段少的参数或者不同类型的参数来创建对象就很方便。Julia 的对象构造系统解决了所有这些问题。
 
 [^1]:
-    Nomenclature: while the term "constructor" generally refers to the entire function which constructs
-    objects of a type, it is common to abuse terminology slightly and refer to specific constructor
-    methods as "constructors". In such situations, it is generally clear from context that the term
-    is used to mean "constructor method" rather than "constructor function", especially as it is often
-    used in the sense of singling out a particular method of the constructor from all of the others.
+命名法：虽然术语“构造函数”通常是指构造一个类型的对象的整个函数，但通常会略微滥用术语将特定的构造方法称为“构造函数”。这种情况下，通常可以从上下文中清楚地看出术语是用于表示“构造方法”而不是“构造函数”，因为它通常用于从所有构造方法中挑出构造函数的特定方法的场合。
 
-## Outer Constructor Methods
+## 外部构造方法
 
-A constructor is just like any other function in Julia in that its overall behavior is defined
-by the combined behavior of its methods. Accordingly, you can add functionality to a constructor
-by simply defining new methods. For example, let's say you want to add a constructor method for
-`Foo` objects that takes only one argument and uses the given value for both the `bar` and `baz`
-fields. This is simple:
+构造函数与 Julia 中的其他任何函数一样，其整体行为由其各个方法的组合行为定义。因此，你可以通过简单地定义新方法来向构造函数添加功能。例如，假设你想为 `Foo` 对象添加一个构造方法，该方法只接受一个参数并用该参数同时绑定为 `bar` 和 `baz`  字段的值。这很简单：
 
 ```jldoctest footype
 julia> Foo(x) = Foo(x,x)
@@ -54,8 +35,7 @@ julia> Foo(1)
 Foo(1, 1)
 ```
 
-You could also add a zero-argument `Foo` constructor method that supplies default values for both
-of the `bar` and `baz` fields:
+你也可以为 `Foo` 添加新的零参数构造方法，它为字段 `bar` 和 `baz` 提供默认值：
 
 ```jldoctest footype
 julia> Foo() = Foo(0)
@@ -95,7 +75,7 @@ julia> struct OrderedPair
        end
 ```
 
-Now `OrderedPair` objects can only be constructed such that `x <= y`:
+现在 `OrderedPair` 对象只能在 `x <= y` 时构造：
 
 ```jldoctest pairtype; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
 julia> OrderedPair(1, 2)
